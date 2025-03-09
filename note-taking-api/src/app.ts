@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import noteRoutes from './routes/noteRoutes';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,8 +9,11 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+// Serve static files
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Database connection
-mongoose.connect('mongodb+srv://eee:<db_password>@cluster0.zpwxe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/note-taking-api')
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 
